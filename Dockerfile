@@ -1,7 +1,5 @@
-FROM debian:wheezy
-MAINTAINER tuxeh <sirtuxeh@gmail.com>
-
-# mono 3.10 currently doesn't install in debian jessie due to libpeg8 being removed.
+FROM phusion/baseimage
+MAINTAINER fatalglitch <tcalla3@gmail.com>
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
   && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC \
@@ -12,12 +10,13 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN chown -R nobody:users /opt/NzbDrone \
-  ; mkdir -p /volumes/config/sonarr /volumes/completed /volumes/media \
-  && chown -R nobody:users /volumes
+  ; mkdir -p /config/NzbDrone /volumes/completed /volumes/media \
+  && chown -R nobody:users /volumes \
+  && chown -R nobody:users /config/NzbDrone
 
 EXPOSE 8989
 EXPOSE 9898
-VOLUME /volumes/config
+VOLUME /config
 VOLUME /volumes/completed
 VOLUME /volumes/media
 
